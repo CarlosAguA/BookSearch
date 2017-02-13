@@ -4,6 +4,10 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import java.io.BufferedReader;
@@ -23,19 +27,38 @@ public class BookActivity extends AppCompatActivity {
     InternetConnection googleBooks;
     /** URL to query the Google Books for books information */
     private static final String BOOKS_REQUEST_URL =
-            " https://www.googleapis.com/books/v1/volumes?q=subject+energy+informatics ";
+            " https://www.googleapis.com/books/v1/volumes?q=subject+";
 
     // ListView bookListView ; caso d3e ponerlo como en UDACITY GITHUB
 
+    ImageButton searchButton;
+    EditText inputSearch ;
+
+    public static final String LOG_TAG = BookActivity.class.getName();
+
+    public static final String RESULTS = "&maxResults=15" ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book);
 
-        // Start the AsyncTask to fetch the earthquake data
-        googleBooks = new InternetConnection() ;
-        googleBooks.execute(BOOKS_REQUEST_URL) ;
+        searchButton =(ImageButton) findViewById(R.id.searchButton);
+        inputSearch = (EditText) findViewById(R.id.inputSearch) ;
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String query = BOOKS_REQUEST_URL + formatSearch( inputSearch.getText().toString() )  ;
+                Log.i(LOG_TAG, query ) ;
+
+                // Start the AsyncTask to fetch the earthquake data
+                googleBooks = new InternetConnection() ;
+                googleBooks.execute(query) ;
+
+            }
+        });
     }
 
     private class InternetConnection extends AsyncTask <String, Void, List<Book> > {
@@ -68,9 +91,10 @@ public class BookActivity extends AppCompatActivity {
         }
     }
 
+    private String formatSearch (String query){
 
-
-
+        return query.replace(" ", "+") + RESULTS ;
+    }
 
 
 

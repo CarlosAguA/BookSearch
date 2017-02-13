@@ -34,6 +34,7 @@
 
         android:id="@+id/tv3"
         android:textSize="16sp"
-        tools:text="@string/description"/>
+        tools:text="@string/description"
+        android:maxLines="5"/>
 
 </LinearLayout>
