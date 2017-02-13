@@ -165,7 +165,7 @@ public class QueryUtils {
                     String authors = "";
                     for ( int j = 0 ; j < authorsArray.length(); j++) {
 
-                        authors += volumeInfo.getString("authors");
+                        authors += volumeInfo.getString("authors") ;
                     }
 
                     String description =  volumeInfo.getString("description");

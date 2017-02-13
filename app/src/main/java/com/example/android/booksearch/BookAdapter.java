@@ -43,7 +43,9 @@ public class BookAdapter  extends ArrayAdapter<Book> {
         // Find the TextView with view ID tv2 for setting author
         TextView authorTextView = (TextView) listItemView.findViewById(R.id.tv2) ;
         // Display the magnitude of the current earthquake in that TextView
-        authorTextView.setText(currentBook.getAuthor()) ;
+        authorTextView.setText( formatAuthor(currentBook.getAuthor()));
+
+
 
         // Find the TextView with view ID magnitude tv3 for setting description
         TextView descriptionTextView = (TextView) listItemView.findViewById(R.id.tv3) ;
@@ -53,4 +55,11 @@ public class BookAdapter  extends ArrayAdapter<Book> {
 
         return listItemView ;
     }
+
+    private String formatAuthor (String authors){
+
+        return authors.replace("[", "").replace("]", "").replace("\"","").replace(",",", ") ;
+    }
+
+
 }
