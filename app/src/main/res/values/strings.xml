@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Book Search</string>
+
+    <string name="author">J.K Rowling</string>
+    <string name="title">Harry Potter and the Chamber of Secrets</string>
+    <string name="description">It´s a relly nice book about the story of a magician </string>
+
+</resources>
