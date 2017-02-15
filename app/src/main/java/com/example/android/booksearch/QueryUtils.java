@@ -1,7 +1,9 @@
 package com.example.android.booksearch;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +29,7 @@ public class QueryUtils {
     public static final String LOG_TAG = QueryUtils.class.getName();
 
     private QueryUtils (){
+
     }
 
     /**
@@ -90,6 +93,7 @@ public class QueryUtils {
         } catch (IOException e) {
             // TODO: Handle the exception
             Log.e(LOG_TAG, "Problem parsing the earthquake JSON results", e ) ;
+
 
         } finally {
             if (urlConnection != null) {

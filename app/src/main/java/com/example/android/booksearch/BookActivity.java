@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,10 +30,11 @@ public class BookActivity extends AppCompatActivity {
     private static final String BOOKS_REQUEST_URL =
             " https://www.googleapis.com/books/v1/volumes?q=subject+";
 
-    // ListView bookListView ; caso d3e ponerlo como en UDACITY GITHUB
+    // ListView bookListView ; caso de ponerlo como en UDACITY GITHUB
 
     ImageButton searchButton;
     EditText inputSearch ;
+    TextView userInfo ;
 
     public static final String LOG_TAG = BookActivity.class.getName();
 
@@ -45,6 +47,7 @@ public class BookActivity extends AppCompatActivity {
 
         searchButton =(ImageButton) findViewById(R.id.searchButton);
         inputSearch = (EditText) findViewById(R.id.inputSearch) ;
+        userInfo = (TextView) findViewById(R.id.info_tv);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +55,7 @@ public class BookActivity extends AppCompatActivity {
 
                 String query = BOOKS_REQUEST_URL + formatSearch( inputSearch.getText().toString() )  ;
                 Log.i(LOG_TAG, query ) ;
+                userInfo.setVisibility(View.GONE);
 
                 // Start the AsyncTask to fetch the earthquake data
                 googleBooks = new InternetConnection() ;
@@ -76,9 +80,14 @@ public class BookActivity extends AppCompatActivity {
             return result;
         }
 
-
         @Override
         protected void onPostExecute(List<Book> books) {
+
+            //If the result from doInBackground() (List<Book> object) is null, return and do nothing.
+            if (books == null) {
+                return;
+            }
+
             // Find a reference to the {@link ListView} in the layout
             ListView bookListView = (ListView) findViewById(R.id.list);
 
@@ -95,7 +104,5 @@ public class BookActivity extends AppCompatActivity {
 
         return query.replace(" ", "+") + RESULTS ;
     }
-
-
 
 }
