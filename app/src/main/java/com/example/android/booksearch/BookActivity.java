@@ -1,5 +1,8 @@
 package com.example.android.booksearch;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -69,6 +73,12 @@ public class BookActivity extends AppCompatActivity {
     private class InternetConnection extends AsyncTask <String, Void, List<Book> > {
 
         @Override
+        protected void onPreExecute() {
+
+            checkInternetConenction();
+        }
+
+        @Override
         protected List<Book> doInBackground(String... urls) {
 
             // Don't perform the request if there are no URLs, or the first URL is null
@@ -106,4 +116,14 @@ public class BookActivity extends AppCompatActivity {
         return query.replace(" ", "+") + RESULTS ;
     }
 
+    private void checkInternetConenction() {
+
+        ConnectivityManager cm =(ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = cm.getActiveNetworkInfo();
+        if (info == null) {
+
+            Toast.makeText(getApplicationContext()," No Internet Connection" ,Toast.LENGTH_LONG).show();
+
+        }
+    }
 }
