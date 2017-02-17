@@ -94,7 +94,6 @@ public class QueryUtils {
             // TODO: Handle the exception
             Log.e(LOG_TAG, "Problem parsing the earthquake JSON results", e ) ;
 
-
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -173,10 +172,12 @@ public class QueryUtils {
                     }
 
                     String description =  volumeInfo.getString("description");
+                    JSONObject bookImage = volumeInfo.getJSONObject("imageLinks");
+                    String imageUrl = bookImage.getString("smallThumbnail") ;
 
                     // Create a new {@link Book} object with the title, author, description,
                     // and url from the JSON response.
-                    Book book = new Book(title, authors, description );
+                    Book book = new Book(title, authors, description, imageUrl );
 
                     // Add the new {@link Book} to the list.
                     books.add(book);
