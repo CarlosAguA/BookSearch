@@ -5,6 +5,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.PersistableBundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +29,8 @@ public class BookActivity extends AppCompatActivity {
     private static final String BOOKS_REQUEST_URL =
             " https://www.googleapis.com/books/v1/volumes?q=subject+";
 
+    private static final int BOOK_LOADER_ID = 1 ;
+
     ImageButton searchButton;
     EditText inputSearch ;
     TextView userInfo ;
@@ -37,7 +41,6 @@ public class BookActivity extends AppCompatActivity {
 
     /* Constant with the query that indicates maxResults*/
     public static final String RESULTS = "&maxResults=15" ;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,8 @@ public class BookActivity extends AppCompatActivity {
         // Set the adapter on the {@link ListView}
         // so the list can be populated in the user interface
         bookListView.setAdapter(mAdapter);
+
+
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
