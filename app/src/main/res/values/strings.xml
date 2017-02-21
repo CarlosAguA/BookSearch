@@ -5,4 +5,5 @@
     <string name="title">Harry Potter and the Chamber of Secrets</string>
     <string name="description">It´s a relly nice book about the story of a magician </string>
 
+    <string name="noBooks">No books found</string>
 </resources>

@@ -37,6 +37,15 @@ public class QueryUtils {
      */
     public static List<Book> fetchBookData(String requestUrl) {
 
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Log.i(LOG_TAG, "Loader : Fetch Book Data" + requestUrl );
+
         URL url = createUrl(requestUrl); //Instantiate URL object and execute createURL(@String) method
 
         // Perform HTTP request to the URL and receive a JSON response back

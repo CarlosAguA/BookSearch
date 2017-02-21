@@ -2,7 +2,7 @@ package com.example.android.booksearch;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
-import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.List;
 
@@ -34,6 +34,7 @@ public class BookLoader extends AsyncTaskLoader <List<Book> > {
 
     @Override
     protected void onStartLoading() {
+        Log.i(LOG_TAG, "Loader : On Start Loading");
         forceLoad();
     }
 
@@ -42,6 +43,9 @@ public class BookLoader extends AsyncTaskLoader <List<Book> > {
      */
     @Override
     public List<Book> loadInBackground() {
+
+        Log.i(LOG_TAG, "Loader : Load In Background");
+
         if (mUrl == null) {
             return null;
         }
