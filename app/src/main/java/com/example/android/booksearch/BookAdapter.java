@@ -52,22 +52,26 @@ public class BookAdapter  extends ArrayAdapter<Book> {
 
         // Find the TextView with view ID tv1 for setting title
         TextView titleTextView = (TextView) listItemView.findViewById(R.id.tv1) ;
-        // Display the magnitude of the current earthquake in that TextView
+        // Display the magnitude of the current book in that TextView
         titleTextView.setText(currentBook.getTitle()) ;
 
         // Find the TextView with view ID tv2 for setting author
         TextView authorTextView = (TextView) listItemView.findViewById(R.id.tv2) ;
-        // Display the magnitude of the current earthquake in that TextView
+        // Display the magnitude of the current book in that TextView
         authorTextView.setText( formatAuthor(currentBook.getAuthor()));
 
         // Find the TextView with view ID magnitude tv3 for setting description
         TextView descriptionTextView = (TextView) listItemView.findViewById(R.id.tv3) ;
-        // Display the magnitude of the current earthquake in that TextView
+        // Display the magnitude of the current book in that TextView
         descriptionTextView.setText(currentBook.getDescription()) ;
 
         return listItemView ;
     }
 
+    /* Method that formats the author string in a proper way.
+       Since the JSON ARRAY response returns a string like [J.k.Rowling,Hermione Granger,Draco Malfoy];
+       this method removes the brackets and formats the author string in a proper way.
+     */
     private String formatAuthor (String authors){
 
         return authors.replace("[", "").replace("]", "").replace("\"","").replace(",",", ") ;

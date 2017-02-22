@@ -25,7 +25,7 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final String BOOKS_REQUEST_URL =
             "https://www.googleapis.com/books/v1/volumes?q=subject+";
 
-    /* Id for identifying the loader */ 
+    /* Id for identifying the loader */
     private static final int BOOK_LOADER_ID = 1 ;
 
     ImageButton searchButton ; // Search button
