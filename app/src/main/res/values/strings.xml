@@ -6,4 +6,6 @@
     <string name="description">It´s a relly nice book about the story of a magician </string>
 
     <string name="noBooks">No books found</string>
+    <string name="instructions">Enter a book topic or name </string>
+    <string name="connection">No internet connection</string>
 </resources>

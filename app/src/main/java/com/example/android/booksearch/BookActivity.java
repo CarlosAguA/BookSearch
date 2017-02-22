@@ -48,7 +48,8 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
 
         progressBar.setVisibility(View.GONE);
 
-        // Set empty state text to display "No earthquakes found."
+        emptyState.setVisibility(View.VISIBLE);
+        // Set empty state text to display "No books found."
         emptyState.setText(R.string.noBooks);
 
         Log.i(LOG_TAG, "TEST  : OnLoadFinished()");
@@ -88,7 +89,9 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
 
         searchButton =(ImageButton) findViewById(R.id.searchButton);
         inputSearch = (EditText) findViewById(R.id.inputSearch) ;
+
         emptyState = (TextView) findViewById(R.id.info_tv);
+        emptyState.setText(R.string.instructions);
 
         progressBar = findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
@@ -115,26 +118,36 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void onClick(View view) {
 
+                emptyState.setVisibility(View.GONE);
                 progressBar.setVisibility(View.VISIBLE);
 
                 query = BOOKS_REQUEST_URL + formatSearch( inputSearch.getText().toString() )  ;
-                checkInternetConenction();
                 Log.i(LOG_TAG, "TEST:" + query) ;
 
-                 bundle = new Bundle() ;
-                 bundle.putString("BOOK_API", query );
+                // Get details on the currently active default data network
+                NetworkInfo networkInfo =  checkInternetConenction();
+                if (networkInfo != null && networkInfo.isConnected()) {
 
-                if(loaderManager.getLoader(BOOK_LOADER_ID) != null ){
+                   bundle = new Bundle() ;
+                   bundle.putString("BOOK_API", query );
+
+                   if(loaderManager.getLoader(BOOK_LOADER_ID) != null ){
 
                     loaderManager.restartLoader(BOOK_LOADER_ID, bundle ,BookActivity.this);
+                    }
+
+                    // Initialize the loader. Pass in the int ID constant defined above and pass in null for
+                    // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
+                    // because this activity implements the LoaderCallbacks interface).
+                    loaderManager.initLoader(BOOK_LOADER_ID, bundle, BookActivity.this);
+                    Log.i(LOG_TAG, "TEST  : initloader() ");
+
+                }else{
+                   progressBar.setVisibility(View.GONE);
+                    emptyState.setVisibility(View.VISIBLE);
+                    // Update empty state with no connection error message
+                    emptyState.setText(R.string.connection);
                 }
-
-                // Initialize the loader. Pass in the int ID constant defined above and pass in null for
-                // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
-                // because this activity implements the LoaderCallbacks interface).
-                loaderManager.initLoader(BOOK_LOADER_ID, bundle, BookActivity.this);
-                Log.i(LOG_TAG, "TEST  : initloader() ");
-
 
             }
         });
@@ -152,7 +165,7 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
     This method uses a ConnectivityManager instance for checking the state of the Internet connection
     It will show a toast in case no Internet connection is found
      */
-    private void checkInternetConenction() {
+    private NetworkInfo checkInternetConenction() {
 
         ConnectivityManager cm =(ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = cm.getActiveNetworkInfo();
@@ -161,5 +174,6 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
             Toast.makeText(getApplicationContext()," No Internet Connection" ,Toast.LENGTH_LONG).show();
 
         }
+        return info ;
     }
 }
