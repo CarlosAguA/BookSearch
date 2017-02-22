@@ -18,8 +18,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.R.attr.id;
-
 
 public class BookActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Book>> {
 
@@ -27,16 +25,17 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final String BOOKS_REQUEST_URL =
             "https://www.googleapis.com/books/v1/volumes?q=subject+";
 
+    /* Id for identifying the loader */ 
     private static final int BOOK_LOADER_ID = 1 ;
 
-    ImageButton searchButton ;
-    EditText inputSearch ;
-    TextView emptyState ;
+    ImageButton searchButton ; // Search button
+    EditText inputSearch ;  // Search field
+    TextView emptyState ;  // Empty state TextView for improving UX
     BookAdapter mAdapter ; //Global mAdapter that modifies on each bookListUpdating
-    String query ;
+    String query ; // final query that contains the book search info
     LoaderManager loaderManager ;
     Bundle bundle ;
-    View progressBar;
+    View progressBar; // Progress bar for improving UX while data is fetched from server
 
     public static final String LOG_TAG = BookActivity.class.getName();
 
@@ -87,18 +86,22 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
 
         Log.i(LOG_TAG, "TEST  : Method OnCreate()");
 
+        // Find a reference to the {@link ImageButton} in the layout
         searchButton =(ImageButton) findViewById(R.id.searchButton);
+        // Find a reference to the {@link EditText} in the layout
         inputSearch = (EditText) findViewById(R.id.inputSearch) ;
-
-        emptyState = (TextView) findViewById(R.id.info_tv);
-        emptyState.setText(R.string.instructions);
-
-        progressBar = findViewById(R.id.progress_bar);
-        progressBar.setVisibility(View.GONE);
-
         // Find a reference to the {@link ListView} in the layout
         ListView  bookListView = (ListView) findViewById(R.id.list) ;
+        // Find a reference to the {@link ProgressBar} in the layout
+        progressBar = findViewById(R.id.progress_bar);
+        // Find a reference to the {@link TextView} in the layout
+        emptyState = (TextView) findViewById(R.id.info_tv);
+        //Set String to emptyState textView
+        emptyState.setText(R.string.instructions);
+        //Assign the emptyState to the ListView
         bookListView.setEmptyView(emptyState);
+        //Remove progress bar from UI
+        progressBar.setVisibility(View.GONE);
 
         // Create a new adapter that takes an empty list of books as input
         mAdapter = new BookAdapter(this, new ArrayList<Book>());
@@ -110,6 +113,8 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
         // Get a reference to the LoaderManager, in order to interact with loaders.
         loaderManager = getLoaderManager();
 
+        //When the activity is created, check if the loader with the BOOK_LOADER_ID exists. If exists,
+        // load the information from the BOOK_LOADER_ID loader.
         if(loaderManager.getLoader(BOOK_LOADER_ID) != null ){
             loaderManager.initLoader(BOOK_LOADER_ID, bundle, BookActivity.this);
         }
@@ -118,22 +123,29 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void onClick(View view) {
 
-                emptyState.setVisibility(View.GONE);
-                progressBar.setVisibility(View.VISIBLE);
+                /* User Experience Set up*/
+                emptyState.setVisibility(View.GONE); //Remove empty state text
+                progressBar.setVisibility(View.VISIBLE); // Show progress bar until data fetching completes
 
+                /* Append the new search query info to the default BOOK_REQUEST_URL */
                 query = BOOKS_REQUEST_URL + formatSearch( inputSearch.getText().toString() )  ;
                 Log.i(LOG_TAG, "TEST:" + query) ;
 
-                // Get details on the currently active default data network
+                /* Get network info
+                If there is connection, initialize the loader and check previous loaders
+                */
                 NetworkInfo networkInfo =  checkInternetConenction();
                 if (networkInfo != null && networkInfo.isConnected()) {
 
                    bundle = new Bundle() ;
                    bundle.putString("BOOK_API", query );
 
+                    /*
+                    * Check whether a loader with the BOOK_LOADER_ID exists or not
+                    * If exists, restart the loader since a new search query was implemented
+                    */
                    if(loaderManager.getLoader(BOOK_LOADER_ID) != null ){
-
-                    loaderManager.restartLoader(BOOK_LOADER_ID, bundle ,BookActivity.this);
+                      loaderManager.restartLoader(BOOK_LOADER_ID, bundle ,BookActivity.this);
                     }
 
                     // Initialize the loader. Pass in the int ID constant defined above and pass in null for
@@ -143,10 +155,11 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
                     Log.i(LOG_TAG, "TEST  : initloader() ");
 
                 }else{
-                   progressBar.setVisibility(View.GONE);
-                    emptyState.setVisibility(View.VISIBLE);
-                    // Update empty state with no connection error message
-                    emptyState.setText(R.string.connection);
+                    /*User experience set up*/
+                    mAdapter.clear(); //Clear the listView or adapter
+                    progressBar.setVisibility(View.GONE); // Remove progress bar visibility
+                    emptyState.setVisibility(View.VISIBLE); //Set emptyState text visibility
+                    emptyState.setText(R.string.connection);// Update empty state with no connection error message
                 }
 
             }
