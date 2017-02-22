@@ -18,12 +18,14 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.R.attr.id;
+
 
 public class BookActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Book>> {
 
     /** URL to query the Google Books for books information */
     private static final String BOOKS_REQUEST_URL =
-            " https://www.googleapis.com/books/v1/volumes?q=subject+";
+            " https://www.googleapis.com/books/v1/volumes?q=subject+xamarin+programming&maxResults=15";
 
     private static final int BOOK_LOADER_ID = 1 ;
 
@@ -48,7 +50,7 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
         // Set empty state text to display "No earthquakes found."
         emptyState.setText(R.string.noBooks);
 
-        Log.i(LOG_TAG, "Loader : On Load Finished");
+        Log.i(LOG_TAG, "TEST  : OnLoadFinished()");
         // Clear the adapter of previous earthquake data
         mAdapter.clear();
 
@@ -62,15 +64,15 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public Loader<List<Book>> onCreateLoader(int id, Bundle args) {
-        Log.i(LOG_TAG, "Loader : On Create Loader ");
+        Log.i(LOG_TAG, "TEST  : OnCreateLoader ");
         // Create a new loader for the given URL
-        return new BookLoader(this, query);
+        return new BookLoader(this, BOOKS_REQUEST_URL);
     }
 
     @Override
     public void onLoaderReset(Loader<List<Book>> loader) {
 
-        Log.i(LOG_TAG, "On Loader Reset");
+        Log.i(LOG_TAG, "TEST  : OnLoaderReset()");
         // Loader reset, so we can clear out our existing data.
         mAdapter.clear();
 
@@ -80,6 +82,8 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book);
+
+        Log.i(LOG_TAG, "TEST  : Method OnCreate()");
 
         searchButton =(ImageButton) findViewById(R.id.searchButton);
         inputSearch = (EditText) findViewById(R.id.inputSearch) ;
@@ -99,20 +103,21 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
         // Get a reference to the LoaderManager, in order to interact with loaders.
         loaderManager = getLoaderManager();
 
+        if(loaderManager.getLoader(BOOK_LOADER_ID) != null ){
+            loaderManager.initLoader(BOOK_LOADER_ID, null, BookActivity.this);
+        }
+
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                query = BOOKS_REQUEST_URL + formatSearch( inputSearch.getText().toString() )  ;
-                Log.i(LOG_TAG, "LOADER :" + query ) ;
+               // query = BOOKS_REQUEST_URL + formatSearch( inputSearch.getText().toString() )  ;
                 checkInternetConenction();
-
                 // Initialize the loader. Pass in the int ID constant defined above and pass in null for
                 // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
                 // because this activity implements the LoaderCallbacks interface).
                 loaderManager.initLoader(BOOK_LOADER_ID, null, BookActivity.this);
-                Log.i(LOG_TAG, "LOADER : Init loader");
-
+                Log.i(LOG_TAG, "TEST  : initloader() ");
             }
         });
     }
