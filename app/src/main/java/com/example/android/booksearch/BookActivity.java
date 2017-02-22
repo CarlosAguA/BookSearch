@@ -36,6 +36,7 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
     String query ;
     LoaderManager loaderManager ;
     Bundle bundle ;
+    View progressBar;
 
     public static final String LOG_TAG = BookActivity.class.getName();
 
@@ -45,8 +46,7 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<List<Book>> loader, List<Book> data) {
 
-       // View progressBar= findViewById(R.id.progress_bar);
-       // progressBar.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
 
         // Set empty state text to display "No earthquakes found."
         emptyState.setText(R.string.noBooks);
@@ -90,6 +90,9 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
         inputSearch = (EditText) findViewById(R.id.inputSearch) ;
         emptyState = (TextView) findViewById(R.id.info_tv);
 
+        progressBar = findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.GONE);
+
         // Find a reference to the {@link ListView} in the layout
         ListView  bookListView = (ListView) findViewById(R.id.list) ;
         bookListView.setEmptyView(emptyState);
@@ -112,9 +115,10 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void onClick(View view) {
 
+                progressBar.setVisibility(View.VISIBLE);
+
                 query = BOOKS_REQUEST_URL + formatSearch( inputSearch.getText().toString() )  ;
                 checkInternetConenction();
-
                 Log.i(LOG_TAG, "TEST:" + query) ;
 
                  bundle = new Bundle() ;
@@ -124,6 +128,7 @@ public class BookActivity extends AppCompatActivity implements LoaderManager.Loa
 
                     loaderManager.restartLoader(BOOK_LOADER_ID, bundle ,BookActivity.this);
                 }
+
                 // Initialize the loader. Pass in the int ID constant defined above and pass in null for
                 // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
                 // because this activity implements the LoaderCallbacks interface).
