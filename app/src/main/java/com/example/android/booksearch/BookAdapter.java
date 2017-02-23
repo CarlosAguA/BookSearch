@@ -45,10 +45,16 @@ public class BookAdapter  extends ArrayAdapter<Book> {
         //Find the Imageview with the view ID imageView for setting the picture of the book
         ImageView bookImageView = (ImageView) listItemView.findViewById(R.id.imageView);
 
-        //Implement library specific code lines for adding the image url
-        Picasso.with(context)
-                .load(currentBook.getImageUrl())
-                .into(bookImageView);
+        //Check if the currentBook has an empty imageUrl / path. If so, remove visibility of the
+        //imageView. Otherwise use picasso library and show the image
+        if (currentBook.getImageUrl() ==  null || currentBook.getImageUrl().isEmpty() ){
+            bookImageView.setVisibility(View.GONE);
+        }else {
+            //Implement library specific code lines for adding the image url
+            Picasso.with(context)
+                    .load(currentBook.getImageUrl())
+                    .into(bookImageView);
+        }
 
         // Find the TextView with view ID tv1 for setting title
         TextView titleTextView = (TextView) listItemView.findViewById(R.id.tv1) ;

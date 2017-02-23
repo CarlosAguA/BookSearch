@@ -172,17 +172,26 @@ public class QueryUtils {
                     // for that  book.
                     JSONObject volumeInfo = bookObject.getJSONObject("volumeInfo");
                     String title =  volumeInfo.getString("title");
-                    JSONArray authorsArray = volumeInfo.getJSONArray("authors");
 
                     String authors = "";
-                    for ( int j = 0 ; j < authorsArray.length(); j++) {
-
-                        authors += volumeInfo.getString("authors") ;
+                    if(volumeInfo.has("authors")) {
+                        JSONArray authorsArray = volumeInfo.getJSONArray("authors");
+                        for (int j = 0; j < authorsArray.length(); j++) {
+                            authors += volumeInfo.getString("authors");
+                        }
                     }
 
-                    String description =  volumeInfo.getString("description");
-                    JSONObject bookImage = volumeInfo.getJSONObject("imageLinks");
-                    String imageUrl = bookImage.getString("smallThumbnail") ;
+                    String description = "";
+                    if(volumeInfo.has("description")){
+                         description =  volumeInfo.getString("description");
+                    }
+
+                    String imageUrl = "";
+                    if (volumeInfo.has("imageLinks")){
+                        JSONObject bookImage = volumeInfo.getJSONObject("imageLinks");
+                        imageUrl = bookImage.getString("smallThumbnail") ;
+                    }
+
 
                     // Create a new {@link Book} object with the title, author, description,
                     // and url from the JSON response.
