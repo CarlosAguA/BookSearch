@@ -24,6 +24,7 @@ public class BookAdapter  extends ArrayAdapter<Book> {
 
     private Book currentBook;
     private Context context;
+    ViewHolder holder ;
 
     public BookAdapter (Activity context, List<Book> book ){
         super(context,0 ,book);
@@ -38,38 +39,52 @@ public class BookAdapter  extends ArrayAdapter<Book> {
         if (listItemView == null) {
             listItemView = LayoutInflater.from(getContext()).inflate(
                     R.layout.list_book_item, parent, false);
+            holder = new ViewHolder();
+
+            //Find the Imageview with the view ID imageView for setting the picture of the book
+            holder.bookImageView = (ImageView) listItemView.findViewById(R.id.imageView);
+
+            // Find the TextView with view ID tv1 for setting title
+            holder.titleTextView = (TextView) listItemView.findViewById(R.id.tv1) ;
+
+            // Find the TextView with view ID tv2 for setting author
+            holder.authorTextView = (TextView) listItemView.findViewById(R.id.tv2) ;
+
+            // Find the TextView with view ID magnitude tv3 for setting description
+            holder.descriptionTextView = (TextView) listItemView.findViewById(R.id.tv3) ;
+
+            holder.positionTextView = (TextView) listItemView.findViewById(R.id.position) ;
+
+            //Fixing bad "memory" of te view
+            listItemView.setTag(holder);
         }
 
         currentBook = getItem(position);
-
-        //Find the Imageview with the view ID imageView for setting the picture of the book
-        ImageView bookImageView = (ImageView) listItemView.findViewById(R.id.imageView);
+        holder = (ViewHolder) listItemView.getTag();
 
         //Check if the currentBook has an empty imageUrl / path. If so, remove visibility of the
         //imageView. Otherwise use picasso library and show the image
         if (currentBook.getImageUrl() ==  null || currentBook.getImageUrl().isEmpty() ){
-            bookImageView.setVisibility(View.GONE);
+            holder.bookImageView.setImageResource(R.drawable.thumbnail);
         }else {
             //Implement library specific code lines for adding the image url
             Picasso.with(context)
                     .load(currentBook.getImageUrl())
-                    .into(bookImageView);
+                    .into(holder.bookImageView);
         }
 
-        // Find the TextView with view ID tv1 for setting title
-        TextView titleTextView = (TextView) listItemView.findViewById(R.id.tv1) ;
         // Display the magnitude of the current book in that TextView
-        titleTextView.setText(currentBook.getTitle()) ;
+        holder.titleTextView.setText(currentBook.getTitle()) ;
 
-        // Find the TextView with view ID tv2 for setting author
-        TextView authorTextView = (TextView) listItemView.findViewById(R.id.tv2) ;
         // Display the magnitude of the current book in that TextView
-        authorTextView.setText( formatAuthor(currentBook.getAuthor()));
+        holder.authorTextView.setText( formatAuthor(currentBook.getAuthor()));
 
-        // Find the TextView with view ID magnitude tv3 for setting description
-        TextView descriptionTextView = (TextView) listItemView.findViewById(R.id.tv3) ;
         // Display the magnitude of the current book in that TextView
-        descriptionTextView.setText(currentBook.getDescription()) ;
+        holder.descriptionTextView.setText(currentBook.getDescription()) ;
+
+        holder.positionTextView.setText("The position is: " + String.valueOf(position));
+
+
 
         return listItemView ;
     }
@@ -81,6 +96,14 @@ public class BookAdapter  extends ArrayAdapter<Book> {
     private String formatAuthor (String authors){
 
         return authors.replace("[", "").replace("]", "").replace("\"","").replace(",",", ") ;
+    }
+
+    static class ViewHolder{
+        ImageView bookImageView ;
+        TextView titleTextView ;
+        TextView authorTextView ;
+        TextView descriptionTextView;
+        TextView positionTextView;
     }
 
 }

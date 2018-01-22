@@ -14,10 +14,11 @@
         android:paddingBottom="10dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100sp"
+            android:layout_height="match_parent"
             android:id="@+id/imageView"
-            android:src="@drawable/thumb">
+            android:src="@drawable/thumbnail"
+            >
         </ImageView>
 
         <LinearLayout
@@ -29,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv1"
-                android:textSize="16sp"
+                android:textSize="20dp"
                 android:maxLines="3"
                 android:ellipsize="end"
                 android:fontFamily="sans-serif-medium"
@@ -43,7 +44,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:id="@+id/tv2"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 tools:text="@string/author"
                 android:paddingTop="5dp"
                 android:paddingLeft="16dp"/>
@@ -61,5 +62,13 @@
         tools:text="@string/description"
         android:maxLines="5"
         android:paddingTop="3dp" />
+
+    <TextView
+        android:text="Position"
+        android:id="@+id/position"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        />
 
 </LinearLayout>
